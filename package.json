@@ -2,6 +2,7 @@
   "name": "users-db-app",
   "version": "1.0.0",
   "description": "База пользователей",
+  "homepage": "https://atlantis3221.github.io/users-db-app",
   "scripts": {
     "dev": "webpack serve --mode development",
     "build": "webpack --mode production",

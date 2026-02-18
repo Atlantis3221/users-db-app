@@ -21,7 +21,7 @@ const root = document.getElementById('root');
 ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      <BrowserRouter basename={process.env.PUBLIC_URL || ''}>
         <ConfigProvider 
           locale={ruRU}
           theme={{

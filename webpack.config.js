@@ -1,14 +1,27 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const packageJson = require('./package.json');
+const homepage = packageJson.homepage || '';
+const basename = homepage ? (() => { try { const p = new URL(homepage).pathname; return p.replace(/\/$/, '') || '/'; } catch { return ''; } })() : '';
+
 module.exports = {
   entry: './src/app/index.tsx',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].[contenthash].js',
     clean: true,
-    publicPath: '/',
+    publicPath: basename ? `${basename}/` : '/',
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/app/index.html',
+      filename: 'index.html',
+    }),
+    ...(basename ? [new (require('webpack').DefinePlugin)({
+      'process.env.PUBLIC_URL': JSON.stringify(basename),
+    })] : []),
+  ],
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
     alias: {
@@ -33,12 +46,6 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: './src/app/index.html',
-      filename: 'index.html',
-    }),
-  ],
   devServer: {
     static: path.join(__dirname, 'dist'),
     port: 3000,
